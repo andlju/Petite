@@ -1,6 +1,6 @@
 Petite
 ======
-The Petite Dependency Injection Container (or PetiteDic if you so prefer..) is a very light-weight
+The Petite Dependency Injection Container (or PetiteDIC if you so prefer..) is a very light-weight
 container that only covers the very basic needs. It is inspired mainly by Funq, but has even less
 bells and whistles.
 
@@ -32,5 +32,19 @@ Sample usage:
 	 var mySingleton = container.Resolve<IMySingleton>();
 	 var sameSingleton = container.Resolve<IMySingleton>();
 
+	 // You can also register an existing instance as a singleton if you're into that
+	 var myInstance = new MyOtherSingletonImplementation();
+	 container.RegisterInstance<IMyOtherSingleton>(myInstance);
+
+	 // This will be the same as myInstance
+	 var otherSingleton = container.Resolve<IMyOtherSingleton>();
 
 And that is pretty much it for now. Feel free to fork and send me a pull request or two!
+
+TODO
+----
+ - Test it in a real-world scenario.
+ - Make SingletonServiceHandler thread-safe
+ - Think about resolving multiple instances (ResolveAll). Need it?
+ - Compatibility with Silverlight
+ - Take over the world

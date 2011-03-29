@@ -18,7 +18,7 @@ namespace Petite.Tests
         public void Registered_Interface_Is_Resolved()
         {
             var target = new Container();
-
+            
             target.Register<ISimpleTestService>(c => new SimpleTestService());
 
             var resolved = target.Resolve<ISimpleTestService>();
@@ -80,7 +80,7 @@ namespace Petite.Tests
         }
 
         [TestMethod]
-        public void Singleton_Registration_Returns_New_Instance_Every_Resolve()
+        public void Singleton_Registration_Returns_Same_Instance_Every_Resolve()
         {
             var target = new Container();
 
@@ -90,6 +90,20 @@ namespace Petite.Tests
             var resolvedSecond = target.Resolve<ISimpleTestService>("Name");
 
             Assert.AreSame(resolvedFirst, resolvedSecond);
+        }
+
+        [TestMethod]
+        public void Instance_Registration_Returns_Given_Instance_Every_Resolve()
+        {
+            var target = new Container();
+            var instance = new SimpleTestService();
+            target.RegisterInstance<ISimpleTestService>("Name", instance);
+
+            var resolvedFirst = target.Resolve<ISimpleTestService>("Name");
+            var resolvedSecond = target.Resolve<ISimpleTestService>("Name");
+
+            Assert.AreSame(instance, resolvedFirst);
+            Assert.AreSame(instance, resolvedSecond);
         }
 
         [TestMethod]
@@ -170,7 +184,7 @@ namespace Petite.Tests
             
             Assert.IsNotNull(thrownException);
             Assert.AreEqual(thrownException.ServiceType, typeof(ISimpleTestService));
-            Assert.AreEqual(thrownException.FirstFailedType, typeof(ISimpleTestService));
+            Assert.IsTrue(thrownException.Message.Contains(typeof(ISimpleTestService).ToString()), "Exception should contain the name of the interface that wasn't resolved.");
         }
 
         [TestMethod]
@@ -193,7 +207,8 @@ namespace Petite.Tests
 
             Assert.IsNotNull(thrownException);
             Assert.AreEqual(thrownException.ServiceType, typeof(IServiceWithNestedService));
-            Assert.AreEqual(thrownException.FirstFailedType, typeof(ISimpleTestService));
+            Assert.IsTrue(thrownException.Message.Contains(typeof(ISimpleTestService).ToString()), "Exception should contain the name of the interface that wasn't resolved.");
+            Assert.IsTrue(thrownException.Message.Contains(typeof(ISimpleTestService).ToString()), "Exception should contain the name of the original interface that failed.");
         }
 
 
