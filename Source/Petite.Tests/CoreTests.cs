@@ -80,6 +80,18 @@ namespace Petite.Tests
         }
 
         [TestMethod]
+        public void Standard_Registration_Returns_An_Instance_On_Resolve()
+        {
+            var target = new Container();
+
+            target.Register<ISimpleTestService>("Name", c => new SimpleTestService());
+
+            var resolved = target.Resolve<ISimpleTestService>("Name");
+
+            Assert.IsNotNull(resolved);
+        }
+
+        [TestMethod]
         public void Singleton_Registration_Returns_Same_Instance_Every_Resolve()
         {
             var target = new Container();
@@ -90,6 +102,18 @@ namespace Petite.Tests
             var resolvedSecond = target.Resolve<ISimpleTestService>("Name");
 
             Assert.AreSame(resolvedFirst, resolvedSecond);
+        }
+
+        [TestMethod]
+        public void Singleton_Registration_Returns_An_Instance_On_Resolve()
+        {
+            var target = new Container();
+
+            target.RegisterSingleton<ISimpleTestService>("Name", c => new SimpleTestService());
+
+            var resolved = target.Resolve<ISimpleTestService>("Name");
+
+            Assert.IsNotNull(resolved);
         }
 
         [TestMethod]

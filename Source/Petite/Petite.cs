@@ -268,7 +268,7 @@ namespace Petite
         /// <returns></returns>
         public override TService GetInstance()
         {
-            if (object.Equals(_instance, default(TService)))
+            if (!object.Equals(_instance, default(TService)))
                 return _instance;
 
             return _instance = base.GetInstance();
