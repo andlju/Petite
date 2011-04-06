@@ -236,6 +236,30 @@ namespace Petite.Tests
         }
 
 
+		[TestMethod]
+		public void Non_Generic_Unnamed_Resolve_Returns_Correct_Service()
+		{
+			var target = new Container();
+
+			target.RegisterSingleton<ISimpleTestService>(c => new SimpleTestService());
+
+			var resolvedFirst = target.Resolve(typeof(ISimpleTestService));
+
+			Assert.IsInstanceOfType(resolvedFirst, typeof(SimpleTestService));
+		}
+
+		[TestMethod]
+		public void Non_Generic_Named_Resolve_Returns_Correct_Service()
+		{
+			var target = new Container();
+
+			target.RegisterSingleton<ISimpleTestService>("Test", c => new SimpleTestService());
+
+			var resolvedFirst = target.Resolve("Test", typeof(ISimpleTestService));
+
+			Assert.IsInstanceOfType(resolvedFirst, typeof(SimpleTestService));
+		}
+
     }
 
     interface ISimpleTestService

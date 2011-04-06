@@ -110,7 +110,41 @@ namespace Petite
         {
             return container.Resolve<TService>(null);
         }
-    }
+
+		/// <summary>
+		/// Resolve an instance of an unnamed service
+		/// </summary>
+		/// <param name="container">Container where the service is registered</param>
+		/// <param name="serviceType">Type of the service to resolve</param>
+		/// <returns>An instance of type <paramref name="serviceType"/></returns>
+		/// <remarks>
+		///   Avoid this method since it uses reflection to make the call. In some cases 
+		///   (where you don't know the type at compile type) it might be necessary.
+		/// </remarks>
+		public static object Resolve(this Container container, Type serviceType)
+		{
+			var method = container.GetType().GetMethod("Resolve").MakeGenericMethod(serviceType);
+			return method.Invoke(container, new object[] { null });
+		}
+
+
+		/// <summary>
+		/// Resolve an instance of a named service
+		/// </summary>
+		/// <param name="container">Container where the service is registered</param>
+		/// <param name="serviceType">Type of the service to resolve</param>
+		/// <param name="name">Name of the service</param>
+		/// <returns>An instance of type <paramref name="serviceType"/></returns>
+		/// <remarks>
+		///   Avoid this method since it uses reflection to make the call. In some cases 
+		///   (where you don't know the type at compile type) it might be necessary.
+		/// </remarks>
+		public static object Resolve(this Container container, string name, Type serviceType)
+		{
+			var method = container.GetType().GetMethod("Resolve").MakeGenericMethod(serviceType);
+			return method.Invoke(container, new object[] { name });
+		}
+	}
 
     public sealed class Container
     {
