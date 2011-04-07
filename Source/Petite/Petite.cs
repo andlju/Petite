@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Petite
 {
@@ -127,7 +128,6 @@ namespace Petite
 			return method.Invoke(container, new object[] { null });
 		}
 
-
 		/// <summary>
 		/// Resolve an instance of a named service
 		/// </summary>
@@ -144,12 +144,28 @@ namespace Petite
 			var method = container.GetType().GetMethod("Resolve").MakeGenericMethod(serviceType);
 			return method.Invoke(container, new object[] { name });
 		}
+
+		/// <summary>
+		/// Resolve all instances of service regardless of name
+		/// </summary>
+		/// <param name="container">Container where the services are registered</param>
+		/// <param name="serviceType">Type of the services to resolve</param>
+		/// <returns>Instances of type <paramref name="serviceType"/></returns>
+		/// <remarks>
+		///   Avoid this method since it uses reflection to make the call. In some cases 
+		///   (where you don't know the type at compile type) it might be necessary.
+		/// </remarks>
+		public static IEnumerable<object> ResolveAll(this Container container, Type serviceType)
+		{
+			var method = container.GetType().GetMethod("ResolveAll").MakeGenericMethod(serviceType);
+			return (IEnumerable<object>)method.Invoke(container, null);
+		}
 	}
 
     public sealed class Container
     {
         private readonly ConcurrentDictionary<ServiceKey, IServiceHandler> _serviceLookup = new ConcurrentDictionary<ServiceKey, IServiceHandler>();
-
+		
         /// <summary>
         ///   Core method for registering a service.
         /// </summary>
@@ -188,6 +204,20 @@ namespace Petite
             var service = (ServiceHandlerBase<TService>)registration;
             return service.GetInstance();
         }
+
+		/// <summary>
+		///   Resolves all services of a specified service type regardless of the name given
+		/// </summary>
+		/// <typeparam name="TService">Type of the services to resolve</typeparam>
+		/// <returns>Resolved services</returns>
+		public IEnumerable<TService> ResolveAll<TService>()
+		{
+			var serviceKeys = (from sk in _serviceLookup.Keys
+			                  where sk.ServiceType == typeof(TService)
+			                  select sk);
+
+			return from key in serviceKeys select Resolve<TService>(key.Name);
+		}
 
         private static ServiceKey GetKey(string name, Type serviceType)
         {

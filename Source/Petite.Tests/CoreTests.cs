@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Petite.Tests
@@ -260,7 +261,62 @@ namespace Petite.Tests
 			Assert.IsInstanceOfType(resolvedFirst, typeof(SimpleTestService));
 		}
 
-    }
+		[TestMethod]
+		public void Resolve_All_Returns_All_Named_Items()
+		{
+			var target = new Container();
+
+			target.Register<ISimpleTestService>("First", c => new SimpleTestService());
+			target.Register<ISimpleTestService>("Second", c => new SecondSimpleTestService());
+
+			var allResolved = target.ResolveAll<ISimpleTestService>().ToArray();
+
+			var simpleTestServicesResolved = allResolved.OfType<SimpleTestService>().ToArray();
+			var secondSimpleTestServicesResolved = allResolved.OfType<SecondSimpleTestService>().ToArray();
+
+			Assert.AreEqual(2, allResolved.Length);
+			Assert.AreEqual(1, simpleTestServicesResolved.Length);
+			Assert.AreEqual(1, secondSimpleTestServicesResolved.Length);
+		}
+
+		[TestMethod]
+		public void Resolve_All_Returns_All_Named_And_UnnamedItems()
+		{
+			var target = new Container();
+
+			target.Register<ISimpleTestService>(c => new SimpleTestService());
+			target.Register<ISimpleTestService>("Second", c => new SecondSimpleTestService());
+
+			var allResolved = target.ResolveAll<ISimpleTestService>().ToArray();
+
+			var simpleTestServicesResolved = allResolved.OfType<SimpleTestService>().ToArray();
+			var secondSimpleTestServicesResolved = allResolved.OfType<SecondSimpleTestService>().ToArray();
+
+			Assert.AreEqual(2, allResolved.Length);
+			Assert.AreEqual(1, simpleTestServicesResolved.Length);
+			Assert.AreEqual(1, secondSimpleTestServicesResolved.Length);
+		}
+
+
+		[TestMethod]
+		public void Non_Generic_Named_ResolveAll_Returns_Correct_Services()
+		{
+			var target = new Container();
+
+			target.Register<ISimpleTestService>(c => new SimpleTestService());
+			target.Register<ISimpleTestService>("Second", c => new SecondSimpleTestService());
+
+			var allResolved = target.ResolveAll(typeof(ISimpleTestService)).ToArray();
+
+			var simpleTestServicesResolved = allResolved.OfType<SimpleTestService>().ToArray();
+			var secondSimpleTestServicesResolved = allResolved.OfType<SecondSimpleTestService>().ToArray();
+
+			Assert.AreEqual(2, allResolved.Length);
+			Assert.AreEqual(1, simpleTestServicesResolved.Length);
+			Assert.AreEqual(1, secondSimpleTestServicesResolved.Length);
+		}
+
+	}
 
     interface ISimpleTestService
     {
@@ -272,12 +328,19 @@ namespace Petite.Tests
 
     }
 
-    class SimpleTestService : ISimpleTestService
-    {
-        public SimpleTestService()
-        {
-        }
-    }
+	class SimpleTestService : ISimpleTestService
+	{
+		public SimpleTestService()
+		{
+		}
+	}
+
+	class SecondSimpleTestService : ISimpleTestService
+	{
+		public SecondSimpleTestService()
+		{
+		}
+	}
 
     interface IServiceWithNestedService
     {
