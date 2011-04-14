@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <package> 
   <metadata> 
-    <id>Petite</id> 
-    <version>0.2.0</version> 
+    <id>Petite.Container</id> 
+    <version>0.3.0</version> 
     <authors>Anders Ljusberg</authors>
-    <description>Petite is a very simple and light-weight dependency injection container. It is distributed as source-code only and contains just a single file.</description> 
+    <description>Petite Container is a very simple and light-weight dependency injection container. It is distributed as source-code only and contains just a single file.</description> 
     <language>en-US</language>
     <licenseUrl>https://github.com/andlju/petite/raw/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/andlju/petite</projectUrl>
     <tags>IoC DI container</tags>
   </metadata>
   <files>
-    <file src="..\..\Source\Petite\Petite.cs" target="content"/>
+    <file src="..\..\Source\Petite\Petite.Container.cs" target="content"/>
   </files>
 </package>

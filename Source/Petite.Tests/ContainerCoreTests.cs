@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Petite.Tests
 {
     [TestClass]
-    public class CoreTests
+    public class ContainerCoreTests
     {
         [TestMethod]
         public void Registers_Without_Exception()
@@ -315,7 +315,35 @@ namespace Petite.Tests
 			Assert.AreEqual(1, simpleTestServicesResolved.Length);
 			Assert.AreEqual(1, secondSimpleTestServicesResolved.Length);
 		}
+		/*
+		[TestMethod]
+		public void Per_Resolve_Registration_Nested_Resolve_Returns_Same_Instance()
+		{
+			var target = new Container();
 
+			target.RegisterPerResolve<ISimpleTestService>(c => new SimpleTestService());
+			target.Register<IServiceWithTwoNestedServices>(c => new ServiceWithTwoNestedServices(c.Resolve<ISimpleTestService>(), c.Resolve<ISimpleTestService>()));
+
+			var resolved = target.Resolve<IServiceWithTwoNestedServices>();
+
+			Assert.AreSame(resolved.FirstNestedService, resolved.SecondNestedService);
+		}
+
+		[TestMethod]
+		public void Per_Resolve_Registration_Second_Nested_Resolve_Returns_Different_Instance()
+		{
+			var target = new Container();
+
+			target.RegisterPerResolve<ISimpleTestService>(c => new SimpleTestService());
+			target.Register<IServiceWithTwoNestedServices>(c => new ServiceWithTwoNestedServices(c.Resolve<ISimpleTestService>(), c.Resolve<ISimpleTestService>()));
+
+			var resolvedFirst = target.Resolve<IServiceWithTwoNestedServices>();
+			var resolvedSecond = target.Resolve<IServiceWithTwoNestedServices>();
+
+			Assert.AreNotSame(resolvedFirst.FirstNestedService, resolvedSecond.FirstNestedService);
+			Assert.AreNotSame(resolvedFirst.SecondNestedService, resolvedSecond.SecondNestedService);
+		}
+		*/
 	}
 
     interface ISimpleTestService
@@ -356,4 +384,22 @@ namespace Petite.Tests
             NestedService = nestedService;
         }
     }
+
+	interface IServiceWithTwoNestedServices
+	{
+		ISimpleTestService FirstNestedService { get; }
+		ISimpleTestService SecondNestedService { get; }
+	}
+
+	class ServiceWithTwoNestedServices : IServiceWithTwoNestedServices
+	{
+		public ISimpleTestService FirstNestedService { get; private set; }
+		public ISimpleTestService SecondNestedService { get; private set; }
+
+		public ServiceWithTwoNestedServices(ISimpleTestService firstNestedService, ISimpleTestService secondNestedService)
+		{
+			FirstNestedService = firstNestedService;
+			SecondNestedService = secondNestedService;
+		}
+	}
 }

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <package> 
   <metadata> 
-    <id>Petite.CommonServiceLocator</id> 
-    <version>0.2.0</version> 
+    <id>Petite.Container.CommonServiceLocator</id> 
+    <version>0.3.0</version> 
     <authors>Anders Ljusberg</authors>
-    <description>This is a CommonServiceLocator implementation for Petite</description> 
+    <description>This is a CommonServiceLocator implementation for Petite Container</description> 
     <language>en-US</language>
     <licenseUrl>https://github.com/andlju/petite/raw/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/andlju/petite</projectUrl>
     <tags>IoC DI container</tags>
     <dependencies>
-      <dependency id="Petite" version="0.2.0" />
+      <dependency id="Petite.Container" version="0.3.0" />
       <dependency id="CommonServiceLocator" version="1.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\Source\Petite\PetiteCommonServiceLocator.cs" target="content"/>
+    <file src="..\..\Source\Petite\Petite.Container.CommonServiceLocator.cs" target="content"/>
   </files>
 </package>

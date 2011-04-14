@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>Petite.Repository.Data</id> 
+    <version>0.1.0</version> 
+    <authors>Anders Ljusberg</authors>
+    <description>This contains an implementation of the Repository interface found in Petite.Repository.Domain. Use this in your data access project (wherever the Entity Framework model is located). Also provided is a Context provider that stores your DataContext in the current WCF operation context.</description> 
+    <language>en-US</language>
+    <licenseUrl>https://github.com/andlju/petite/raw/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/andlju/petite</projectUrl>
+    <tags>IoC DI container</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ServiceModel" />
+      <frameworkAssembly assemblyName="System.Data" />
+      <frameworkAssembly assemblyName="System.Data.Entity" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\..\Source\Petite\Petite.Repository.Data.cs" target="content"/>
+  </files>
+</package>

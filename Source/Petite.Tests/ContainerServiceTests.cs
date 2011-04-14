@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Petite.Tests
 {
     [TestClass]
-    public class ServiceTests
+    public class ContainerServiceTests
     {
         [TestMethod]
         public void ServiceKey_Equals_Same_ServiceKey()

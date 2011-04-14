@@ -38,6 +38,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Petite.cs" />
-    <Compile Include="PetiteCommonServiceLocator.cs" />
+    <Compile Include="Petite.Repository.Data.cs" />
+    <Compile Include="Petite.Repository.Domain.cs" />
+    <Compile Include="Petite.Container.cs" />
+    <Compile Include="Petite.Container.CommonServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
