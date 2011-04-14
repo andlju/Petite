@@ -8,7 +8,7 @@
     <language>en-US</language>
     <licenseUrl>https://github.com/andlju/petite/raw/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/andlju/petite</projectUrl>
-    <tags>IoC DI container</tags>
+    <tags>Repository Entity Framework</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ServiceModel" />
       <frameworkAssembly assemblyName="System.Data" />

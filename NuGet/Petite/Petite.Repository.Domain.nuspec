@@ -4,7 +4,7 @@
     <id>Petite.Repository.Domain</id> 
     <version>0.1.0</version> 
     <authors>Anders Ljusberg</authors>
-    <description>This is a Repository interface to use with Petite.Repository.Data. Use this in your Domain project.</description> 
+    <description>This is a Repository interface to use with Petite.Repository.Data. It is distributed as a single source file. This package should be placed in your domain project, the Petite.Repository.Data package should be in your data access project.</description> 
     <language>en-US</language>
     <licenseUrl>https://github.com/andlju/petite/raw/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/andlju/petite</projectUrl>
