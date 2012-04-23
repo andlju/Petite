@@ -238,6 +238,29 @@ namespace Petite.Tests
 
 
 		[TestMethod]
+		public void Exception_In_Nested_Factory_Method_Throws_ResolveException_On_NonGenericResolve()
+		{
+			var target = new Container();
+
+			target.Register<ISimpleTestService>(c => { throw new InvalidOperationException(); });
+			target.Register<IServiceWithNestedService>(c => new ServiceWithNestedService(c.Resolve<ISimpleTestService>()));
+
+			ResolveException thrownException = null;
+			try
+			{
+				target.Resolve(typeof(IServiceWithNestedService));
+			}
+			catch(ResolveException ex)
+			{
+				thrownException = ex;
+			}
+			Assert.IsNotNull(thrownException);
+			Assert.AreEqual(thrownException.ServiceType, typeof(IServiceWithNestedService));
+			Assert.IsTrue(thrownException.Message.Contains(typeof(ISimpleTestService).ToString()), "Exception should contain the name of the interface that wasn't resolved.");
+			Assert.IsTrue(thrownException.Message.Contains(typeof(ISimpleTestService).ToString()), "Exception should contain the name of the original interface that failed.");
+		}
+
+		[TestMethod]
 		public void Non_Generic_Unnamed_Resolve_Returns_Correct_Service()
 		{
 			var target = new Container();
@@ -250,6 +273,25 @@ namespace Petite.Tests
 		}
 
 		[TestMethod]
+		public void Non_Generic_Unnamed_Unknown_Resolve_Throws_UnknownRegistrationException()
+		{
+			var target = new Container();
+
+			target.RegisterSingleton<ISimpleTestService>(c => new SimpleTestService());
+
+			UnknownRegistrationException thrownException = null;
+			try
+			{
+				var resolvedFirst = target.Resolve(typeof(IOtherSimpleTestService));
+			}
+			catch(UnknownRegistrationException ex)
+			{
+				thrownException = ex;
+			}
+			Assert.IsNotNull(thrownException);
+		}
+
+		[TestMethod]
 		public void Non_Generic_Named_Resolve_Returns_Correct_Service()
 		{
 			var target = new Container();
@@ -259,6 +301,25 @@ namespace Petite.Tests
 			var resolvedFirst = target.Resolve("Test", typeof(ISimpleTestService));
 
 			Assert.IsInstanceOfType(resolvedFirst, typeof(SimpleTestService));
+		}
+
+		[TestMethod]
+		public void Non_Generic_Named_Unknown_Resolve_Throws_UnknownRegistrationException()
+		{
+			var target = new Container();
+
+			target.RegisterSingleton<ISimpleTestService>("Test", c => new SimpleTestService());
+
+			UnknownRegistrationException thrownException = null;
+			try
+			{
+				var resolvedFirst = target.Resolve("Unknown", typeof(ISimpleTestService));
+			}
+			catch(UnknownRegistrationException ex)
+			{
+				thrownException = ex;
+			}
+			Assert.IsNotNull(thrownException);
 		}
 
 		[TestMethod]
@@ -315,6 +376,7 @@ namespace Petite.Tests
 			Assert.AreEqual(1, simpleTestServicesResolved.Length);
 			Assert.AreEqual(1, secondSimpleTestServicesResolved.Length);
 		}
+
 		/*
 		[TestMethod]
 		public void Per_Resolve_Registration_Nested_Resolve_Returns_Same_Instance()

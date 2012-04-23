@@ -2,7 +2,7 @@
 <package> 
   <metadata> 
     <id>Petite.Container</id> 
-    <version>0.3.1</version> 
+    <version>0.3.2</version> 
     <authors>Anders Ljusberg</authors>
     <description>Petite Container is a very simple and light-weight dependency injection container. It is distributed as source-code only and contains just a single file.</description> 
     <language>en-US</language>
